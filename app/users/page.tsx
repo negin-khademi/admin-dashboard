@@ -1,10 +1,24 @@
-const users = [
-  { id: 1, name: 'علی رضایی', email: 'ali@example.com' },
-  { id: 2, name: 'زهرا محمدی', email: 'zahra@example.com' },
-  { id: 3, name: 'امیر حسینی', email: 'amir@example.com' },
-];
+'use client';
+
+import { useState } from 'react';
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
 
 export default function UsersPage() {
+  const [users, setUsers] = useState<User[]>([
+    { id: 1, name: 'علی رضایی', email: 'ali@example.com' },
+    { id: 2, name: 'زهرا محمدی', email: 'zahra@example.com' },
+    { id: 3, name: 'امیر حسینی', email: 'amir@example.com' },
+  ]);
+
+  const deleteUser = (id: number) => {
+    setUsers(users.filter((user) => user.id !== id));
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">لیست کاربران</h2>
@@ -24,9 +38,12 @@ export default function UsersPage() {
               <td className="border p-2">{user.name}</td>
               <td className="border p-2">{user.email}</td>
               <td className="border p-2">
-                <a href={`/users/${user.id}`} className="text-blue-500 hover:underline">
+                <a href={`/users/${user.id}`} className="text-blue-500 hover:underline mx-2">
                   مشاهده
                 </a>
+                <button onClick={() => deleteUser(user.id)} className="text-red-500 hover:underline">
+                  حذف
+                </button>
               </td>
             </tr>
           ))}
