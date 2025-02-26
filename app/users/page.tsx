@@ -15,6 +15,21 @@ export default function UsersPage() {
     { id: 3, name: 'امیر حسینی', email: 'amir@example.com' },
   ]);
 
+  const [newUser, setNewUser] = useState({ name: '', email: '' });
+
+  const addUser = () => {
+    if (!newUser.name || !newUser.email) return;
+
+    const newUserData = {
+      id: users.length + 1,
+      name: newUser.name,
+      email: newUser.email,
+    };
+
+    setUsers([...users, newUserData]);
+    setNewUser({ name: '', email: '' });
+  };
+
   const deleteUser = (id: number) => {
     setUsers(users.filter((user) => user.id !== id));
   };
@@ -22,6 +37,28 @@ export default function UsersPage() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">لیست کاربران</h2>
+
+      {/* فرم افزودن کاربر */}
+      <div className="mb-4 p-4 bg-gray-100 rounded">
+        <input
+          type="text"
+          placeholder="نام"
+          value={newUser.name}
+          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+          className="border p-2 rounded mr-2"
+        />
+        <input
+          type="email"
+          placeholder="ایمیل"
+          value={newUser.email}
+          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          className="border p-2 rounded mr-2"
+        />
+        <button onClick={addUser} className="bg-blue-500 text-white p-2 rounded">
+          افزودن کاربر
+        </button>
+      </div>
+
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
