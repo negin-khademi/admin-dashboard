@@ -17,6 +17,8 @@ export default function UsersPage() {
 
   const [newUser, setNewUser] = useState({ name: '', email: '' });
 
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
   const addUser = () => {
     if (!newUser.name || !newUser.email) return;
 
@@ -32,6 +34,17 @@ export default function UsersPage() {
 
   const deleteUser = (id: number) => {
     setUsers(users.filter((user) => user.id !== id));
+  };
+
+  const startEditing = (user: User) => {
+    setEditingUser(user);
+  };
+
+  const saveUser = () => {
+    if (!editingUser) return;
+
+    setUsers(users.map((user) => (user.id === editingUser.id ? editingUser : user)));
+    setEditingUser(null);
   };
 
   return (
@@ -78,6 +91,9 @@ export default function UsersPage() {
                 <a href={`/users/${user.id}`} className="text-blue-500 hover:underline mx-2">
                   مشاهده
                 </a>
+                <button onClick={() => startEditing(user)} className="text-green-500 hover:underline mx-2">
+                  ویرایش
+                </button>
                 <button onClick={() => deleteUser(user.id)} className="text-red-500 hover:underline">
                   حذف
                 </button>
@@ -86,6 +102,30 @@ export default function UsersPage() {
           ))}
         </tbody>
       </table>
+
+      {editingUser && (
+        <div className="mb-4 p-4 bg-yellow-100 rounded">
+          <h3 className="text-lg font-semibold">ویرایش کاربر</h3>
+          <input
+            type="text"
+            value={editingUser.name}
+            onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+            className="border p-2 rounded mr-2"
+          />
+          <input
+            type="email"
+            value={editingUser.email}
+            onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+            className="border p-2 rounded mr-2"
+          />
+          <button onClick={saveUser} className="bg-green-500 text-white p-2 rounded">
+            ذخیره تغییرات
+          </button>
+          <button onClick={() => setEditingUser(null)} className="bg-gray-500 text-white p-2 rounded ml-2">
+            لغو
+          </button>
+        </div>
+      )}
     </div>
   );
 }
